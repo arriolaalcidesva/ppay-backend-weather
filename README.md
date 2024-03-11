@@ -56,7 +56,7 @@ Dentro del directorio /config se encuentran los archivos json de cada entorno, p
 
 ### **API REST**
 Para observar la documentacion del api rest, el proyecto cuenta con un modulo de swagger, puede accederlo desde:
-http://localhost:8080/doc/
+http://127.0.0.1:8080/doc/
 
 ### **Decisiones de arquitectura**
 El api fue dividida en tres capas:
