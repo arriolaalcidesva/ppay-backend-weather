@@ -1,0 +1,318 @@
+openapi: 3.0.0
+info:
+  version: "base"
+  title: "Challenge API"
+  description: "Esta aplicacion permite obtener datos de una ip y el clima de la ciudad"
+  contact:
+    name: "Alcides Arriola"
+    url: ""
+    email: "arriolaalcides@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+    
+servers:
+  - url: "http://127.0.0.1:8080/v1/"
+    description: "Node Developer Applicant Interview Test V1"
+
+components:
+  schemas:
+    notfound:
+      type: string
+      example: {"error":"Route not found."}
+    weather:
+      type: object
+      properties:
+        coord:
+          type: object
+          properties:
+            lat:
+              type: number
+              example: -58.38
+            lon:
+              type: number
+              example: -58.38      
+        weather:
+          type: array
+          items:
+            properties:        
+              id:
+                type: number
+                example: 741
+              main:
+                type: string
+                example: "Fog"
+              description:
+                type: string
+                example: "Fog"
+              icon:
+                type: string
+                example: "50n"
+        base:
+          type: string
+          example: "stations"
+        main:
+          type: object
+          properties:
+            temp:
+              type: number
+              example: 285.25
+            feels_like:
+              type: number
+              example: 284.87
+            temp_min:
+              type: number
+              example: 284.82
+            temp_max:
+              type: number
+              example: 285.93
+            pressure:
+              type: number
+              example: 1014
+            humidity:
+              type: number
+              example: 93                                            
+        visibility:
+          type: number
+          example: 6000
+        wind:
+          type: object
+          properties:
+            speed:
+              type: number
+              example: 40
+            deg:
+              type: number
+              example: 220                   
+        cloud:
+          type: object
+          properties:
+            lat:
+              type: number
+              example: 40       
+        dt:
+          type: number
+          example: 1592620650        
+        sys:
+          type: object
+          properties:
+            type:
+              type: number
+              example: 8224
+            id:
+              type: number
+              example: -58.38
+            country:
+              type: string
+              example: "AR"
+            sunrise:
+              type: number
+              example: 1592564399
+            sunset:
+              type: number
+              example: 1592599797              
+        timezone:
+          type: number
+          example: -10800
+        id:
+          type: number
+          example: 3435910
+        name:
+          type: string
+          example: "Buenos Aires"
+        cod:
+          type: number
+          example: 200
+    location:
+      type: object
+      properties:
+        ip:
+          type: string
+          example: "201.231.147.28"
+        city:
+          type: string
+          example: "Buenos Aires"
+        region:
+          type: string
+          example: "Buenos Aires F.D."
+        region_code:
+          type: "string"
+          example: "C"
+        country:
+          type: string
+          example: "AR"
+        country_code:
+          example: "AR"
+        country_code_iso3:
+          type: string
+          example: "ARG"
+        country_capital:
+          type: string
+          example: "Buenos Aires"
+        country_tld:
+          type: string
+          example: ".ar"
+        country_name:
+          type: string
+          example: "Argentina"
+        continent_code:
+          type: string
+          example: "SA"
+        in_eu:
+          type: boolean
+          example: false
+        postal:
+          type: number
+          example: 1871
+        latitude:
+          type: number
+          example: -34.6021
+        longitude:
+          type: number
+          example: -58.3845
+        timezone:
+          type: string
+          example: "America/Argentina/Buenos_Aires"
+        utc_offset:
+          type: number
+          example: -0300
+        country_calling_code:
+          type: string
+          example: "+54"
+        currency:
+          type: string
+          example: "ARS"
+        currency_name:
+          type: string
+          example: "Peso"
+        languages:
+          type: string
+          example: "es-AR,en,it,de,fr,gn"
+        country_area:
+          type: number
+          example: 2766890,
+        country_population:
+          type: number
+          example: 41343201
+        asn:
+          type: string
+          example: "AS10481"
+        org:
+          type: string
+          example: "Telecom Argentina S.A."
+    current1:
+      type: object
+      properties:
+        city:
+          $ref: '#/components/schemas/location'
+        weather:
+          $ref: '#/components/schemas/weather'
+    current2:
+      type: object
+      properties:
+        city:
+          type: string
+          example: "Los Angeles"
+        weather:
+          $ref: '#/components/schemas/weather'
+    forecast1:
+      type: object
+      properties:
+        city:
+          $ref: '#/components/schemas/location'
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/weather'          
+    forecast2:
+      type: object
+      properties:
+        city:
+          type: string
+          example: "Los Angeles"
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/weather' 
+
+paths:
+  /location:
+    get:
+      description: "Devuelve los datos de ubicación city según ip-api."
+      responses:
+        200:
+          description: "Request success"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location'
+        404:
+          description: "Resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notfound'
+  /current:
+    get:
+      description: "Devuelve los datos de ubicación city o la ubicación actual según ip-api y el estado del tiempo actual."
+      responses:
+        200:
+          description: "Request success"
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/current1'
+        404:
+          description: "Resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notfound'
+  /current/city:
+    get:
+      description: "City es un parámetro opcional. Devuelve los datos de ubicación city o la ubicación actual según ip-api y el estado del tiempo actual."
+      responses:
+        200:
+          description: "Request success"
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/current2'
+        404:
+          description: "Resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notfound'
+  /forecast:
+    get:
+      description: "Devuelve los datos de ubicación city o la ubicación actual según ip-api y el estado del tiempo a 5 días"
+      responses:
+        200:
+          description: "Request success"
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/forecast1'
+        404:
+          description: "Resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notfound'
+  /forecast/city:
+    get:
+      description: "City es un parámetro opcional. Devuelve los datos de ubicación city o la ubicación actual según ip-api y el estado del tiempo a 5 días"
+      responses:
+        200:
+          description: "Request success"
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/forecast2'
+        404:
+          description: "Resource not found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notfound'
